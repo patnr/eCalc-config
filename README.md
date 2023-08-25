@@ -1,5 +1,7 @@
 # Compute emissions for Reek/Drogon based on production time series
 
+![Screenshot](screenshot.png)
+
 - Prerequisite: install **eCalc**.
 - Use: run `run-eCalc.py`. Read output from `emissions_total.csv`.
 
