@@ -141,3 +141,11 @@ docs/.docusaurus/
 .dccache
 
 /examples/*.py
+
+
+
+##########
+# Custom #
+##########
+reek-prod.csv
+emissions.csv
