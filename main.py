@@ -72,8 +72,8 @@ if __name__ == "__main__":
         HERE = Path().cwd()
 
     ## Config
-    model_path = HERE / "drogn.yaml"
-    # model_path = HERE / "reek-model.yaml"
+    # model_path = HERE / "drogn.yaml"
+    model_path = HERE / "reek-model.yaml"
     yaml_model = YamlModel(path=model_path, output_frequency=Frequency.NONE)
     comps = {c.name: id_hash for (id_hash, c) in yaml_model.graph.components.items()}
     model = EnergyCalculator(graph=yaml_model.graph)
