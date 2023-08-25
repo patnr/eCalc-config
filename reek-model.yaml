@@ -89,7 +89,7 @@ INSTALLATIONS:
                 - RATE_FRACTIONS:
                     - 1
                   SUCTION_PRESSURE: 12
-                  DISCHARGE_PRESSURE: 200
+                  DISCHARGE_PRESSURE: SIM1;INJ-HEADP
 
           - NAME: compressor_train
             CATEGORY: COMPRESSOR
