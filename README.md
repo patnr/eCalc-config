@@ -18,7 +18,7 @@
 The difficult part is knowing how to do the configuration in
 
 - `"some-model.yaml"`, which contains all-caps keywords
-- the various constituent relation files (`*.csv`).
+- the various constitutive relation files (`*.csv`).
 
 The configuration herein is mainly sourced from the examples in the [eCalc docs](https://equinor.github.io/ecalc/docs/about/modelling/examples/).
 But I cannot guarantee that the absolute numbers make sense,
