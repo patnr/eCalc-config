@@ -147,5 +147,5 @@ docs/.docusaurus/
 ##########
 # Custom #
 ##########
-reek-prod.csv
+*prod.csv
 emissions.csv

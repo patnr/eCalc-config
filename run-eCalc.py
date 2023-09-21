@@ -23,10 +23,13 @@ HERE = HERE.resolve()
 
 
 def preprocess_prod(infile, outfile):
-#    df = pd.read_csv(HERE / infile, index_col='dd/mm/yyyy', date_format='%d/%m/%Y')
-    df = pd.read_csv(HERE / infile, index_col='dd/mm/yyyy', date_parser=lambda x: pd.to_datetime(x, format='%d/%m/%Y'))
+    """Manipulate time series in `infile`. Write to `outfile`.
 
+    This approach (pandas) is much more reliable than eCalc's yaml arithmetics syntax.
+    """
 
+    df = pd.read_csv(HERE / infile, index_col='dd/mm/yyyy',
+                     date_parser=lambda x: pd.to_datetime(x, format='%d/%m/%Y'))
 
     # Invent injection pressure since didn't get from Geir
     # TODO: instead: use max of injector WBHP (following Angga) once available
@@ -95,8 +98,7 @@ if __name__ == "__main__":
     prod_df = preprocess_prod('from_geir.csv', 'reek-prod.csv')
 
     # Config
-    model_path = HERE / "reek-model.yaml"
-    # model_path = HERE / "drogn.yaml"
+    model_path = HERE / "reek-model.yaml"  # "drogn.yaml"
     yaml_model = YamlModel(path=model_path, output_frequency=Frequency.NONE)
     # comps = {c.name: id_hash for (id_hash, c) in yaml_model.graph.components.items()}
 
