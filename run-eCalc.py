@@ -124,3 +124,4 @@ if __name__ == "__main__":
         colors = {comp: f"C{i}" for i, comp in enumerate(set(energy) | set(emissions))}
         fig1 = plot_results(energy, "Energy usage", colors)
         fig2 = plot_results(emissions, "Emissions", colors)
+        plt.pause(3)

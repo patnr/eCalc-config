@@ -2,6 +2,8 @@
 
 ![Screenshot](screenshot.png)
 
+*NB*: this is very much work in process, subject to major changes.
+
 ## What does `run-eCalc.py` do?
 
 - Pre-process the simulator output (production data)
@@ -43,14 +45,18 @@ to reflect the relevant parameters, and then do `./run-eCalc.py plot`.
 Prerequisites
 
 - Install **eCalc** (in its own virtual env)
+- Fix the shebang in `run-eCalc.py` and run it with argument "plot".  
+  Alternatively, active the virtual env and do `python run-eCalc.py plot`.
 - Change `model_path` in `run-eCalc.py`.
   Examples: `reek-model.yaml`, `drogn.yaml`.
-- Change `infile` in `run-eCalc.py` to the name
-  you will give to the production time series data (csv from ECLIPSE/OPM).
-  Examples: `from_geir.csv`, `drogon_mean.csv`
-  (as in [eCalc docs/example](https://equinor.github.io/ecalc/docs/about/modelling/examples/drogon)).
+- If this is
+    - Drogon: disable/delete line `prod_df = preprocess_prod(...)`.
+    - Reek, or some other field, adapt the preprocessing to suit your needs.
+      As you can see from the current implementation, the pre-processing
+      does some simple arithmetics to compute some new time series
+      (aka. "production data") and rename some of the columns.
 
-ERT will need to
+ERT/PET will need to
 
 - Copy contents of this dir into the member dir
 - Write the eCalc input variables from the ensemble member.
