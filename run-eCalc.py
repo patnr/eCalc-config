@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 #!path/to/virtualenv/for/eCalc/with/binary/of/python  -- no activation required
 """Compute emissions for Reek/Drogon based on production time series."""
 
@@ -28,8 +27,7 @@ def preprocess_prod(infile, outfile):
     This approach (pandas) is much more reliable than eCalc's yaml arithmetics syntax.
     """
 
-    df = pd.read_csv(HERE / infile, index_col='dd/mm/yyyy',
-                     date_parser=lambda x: pd.to_datetime(x, format='%d/%m/%Y'))
+    df = pd.read_csv(HERE / infile, index_col='dd/mm/yyyy', date_format='%d/%m/%Y')
 
     # Invent injection pressure since didn't get from Geir
     # TODO: instead: use max of injector WBHP (following Angga) once available
@@ -38,7 +36,7 @@ def preprocess_prod(infile, outfile):
     # Filter, reorder
     df = df.reindex(columns=['FOPR', 'FGPR', 'FWPR', 'FWIR', 'FGIR', 'WBHP:INJ'])
 
-    # Compute reinjection of produced water
+    # Compute reinjection of produced water (could be that different pump is used for sea water)
     x = df['FWPR']
     # which cannot be more than total injection
     x = x.clip(upper=df['FWIR'])
