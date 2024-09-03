@@ -4,13 +4,44 @@
 from pathlib import Path
 import sys
 
-import matplotlib.pyplot as plt
 import pandas as pd
 
 from libecalc.core.ecalc import EnergyCalculator
 from libecalc.common.time_utils import Frequency
 from libecalc.input.model import YamlModel
 
+
+def plot_results(results, title, colors={}):
+    """Plot columns of `results` (DataFrame), using individual offset/scaling for visibility."""
+    fig = plt.figure(num=title, figsize=(10, 5)); fig.clear()
+    fig, ax = plt.subplots(num=title)
+    fig.suptitle(title)
+    markers = ['^', 'P', '+', 'v', '.', 'x', 'o', 's', 'H', 'X', 'd']
+
+    nCols = results.shape[1]
+    for i, ((component, data), m) in enumerate(zip(results.items(), markers)):
+        ls = "--" if "main_power" in component else "-"
+        if "main_power" in component:
+            continue
+
+        attrs = results.attrs[component]
+        unit = f"{attrs['unit']}"
+
+        if nCols > 1:
+            # scale = 1/data.max()
+            scale = 1.
+            # scale *= (10 + i/len(results))  # for visual distinction
+            yy = scale * data
+            unit = f"{scale:.3} {unit}"
+
+        lbl = "\n".join([component, f"<{attrs['kind']}>", unit])
+        yy.plot(ax=ax, lw=2, ls=ls, marker=m, color=colors.get(component, None), label=lbl, xlabel="time")
+
+    ax.legend(bbox_to_anchor=(1.04, 1), loc="upper left", labelspacing=1.)
+    ax.grid(axis="both", which="both")
+    ax.set_ylim(0)
+    fig.tight_layout()
+    return fig
 
 # pd.set_option('display.max_rows', 1000)
 
@@ -93,10 +124,10 @@ def results_as_df(yaml_model, results, getter) -> pd.DataFrame:
 
 if __name__ == "__main__":
     ## Run
-    prod_df = preprocess_prod('from_geir.csv', 'reek-prod.csv')
+    # prod_df = preprocess_prod('from_geir.csv', 'reek-prod.csv')
 
     # Config
-    model_path = HERE / "reek-model.yaml"  # "drogn.yaml"
+    model_path = HERE / "eConf" / "drogn.yaml"  # "drogn.yaml"
     yaml_model = YamlModel(path=model_path, output_frequency=Frequency.NONE)
     # comps = {c.name: id_hash for (id_hash, c) in yaml_model.graph.components.items()}
 
@@ -114,12 +145,17 @@ if __name__ == "__main__":
 
 
     ## Plot
-    if "plot" in sys.argv:
+    # if "plot" in sys.argv:
+    if True:
         import matplotlib.pyplot as plt
-        from plotting import plot_results
         plt.ion()
 
-        colors = {comp: f"C{i}" for i, comp in enumerate(set(energy) | set(emissions))}
+        colors = {'main_power': 'C0',
+                  'baseload': 'C1',
+                  'boosterpump': 'C2',
+                  'compressor_train': 'C3',
+                  'wi_lp': 'C4',
+                  're-compressors': 'C6'}
         fig1 = plot_results(energy, "Energy usage", colors)
         fig2 = plot_results(emissions, "Emissions", colors)
         plt.pause(3)
